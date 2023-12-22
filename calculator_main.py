@@ -1,5 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+import math
 
 
 class Ui_myCalculator(object):
@@ -199,7 +200,7 @@ class Ui_myCalculator(object):
 "")
         self.button_plus.setObjectName("button_plus")
         self.gridLayout.addWidget(self.button_plus, 7, 4, 1, 1)
-        self.button_equal = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.press_it("="))
+        self.button_equal = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.evaluate_it())
         self.button_equal.setMinimumSize(QtCore.QSize(60, 60))
         self.button_equal.setMaximumSize(QtCore.QSize(300, 90))
         self.button_equal.setStyleSheet("QPushButton#button_equal{\n"
@@ -256,7 +257,7 @@ class Ui_myCalculator(object):
 "")
         self.button_5.setObjectName("button_5")
         self.gridLayout.addWidget(self.button_5, 5, 2, 1, 1)
-        self.button_negative = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.press_it("-"))
+        self.button_negative = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.negative_positive())
         self.button_negative.setMinimumSize(QtCore.QSize(60, 60))
         self.button_negative.setMaximumSize(QtCore.QSize(300, 90))
         self.button_negative.setStyleSheet("QPushButton{\n"
@@ -270,7 +271,7 @@ class Ui_myCalculator(object):
 "")
         self.button_negative.setObjectName("button_negative")
         self.gridLayout.addWidget(self.button_negative, 15, 0, 1, 1)
-        self.button_reciprocal = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.press_it("^"))
+        self.button_reciprocal = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.square())
         self.button_reciprocal.setMinimumSize(QtCore.QSize(60, 60))
         self.button_reciprocal.setMaximumSize(QtCore.QSize(300, 90))
         self.button_reciprocal.setStyleSheet("QPushButton{\n"
@@ -285,7 +286,7 @@ class Ui_myCalculator(object):
 "")
         self.button_reciprocal.setObjectName("button_reciprocal")
         self.gridLayout.addWidget(self.button_reciprocal, 1, 2, 1, 1)
-        self.button_root = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.press_it("√"))
+        self.button_root = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.square_root())
         self.button_root.setMinimumSize(QtCore.QSize(60, 60))
         self.button_root.setMaximumSize(QtCore.QSize(300, 90))
         self.button_root.setStyleSheet("QPushButton{\n"
@@ -330,7 +331,7 @@ class Ui_myCalculator(object):
 "")
         self.button_division.setObjectName("button_division")
         self.gridLayout.addWidget(self.button_division, 1, 4, 1, 1)
-        self.button_dot = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.press_it("."))
+        self.button_dot = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.make_decimal())
         self.button_dot.setMinimumSize(QtCore.QSize(60, 60))
         self.button_dot.setMaximumSize(QtCore.QSize(300, 90))
         self.button_dot.setStyleSheet("QPushButton{\n"
@@ -391,7 +392,7 @@ class Ui_myCalculator(object):
 "")
         self.button_clear.setObjectName("button_clear")
         self.gridLayout.addWidget(self.button_clear, 0, 3, 1, 1)
-        self.button_backspace = QtWidgets.QPushButton(self.keycontainer1)
+        self.button_backspace = QtWidgets.QPushButton(self.keycontainer1, clicked= lambda: self.remove())
         self.button_backspace.setMinimumSize(QtCore.QSize(60, 60))
         self.button_backspace.setMaximumSize(QtCore.QSize(300, 90))
         self.button_backspace.setStyleSheet("QPushButton{\n"
@@ -511,6 +512,53 @@ class Ui_myCalculator(object):
 
         self.retranslateUi(myCalculator)
         QtCore.QMetaObject.connectSlotsByName(myCalculator)
+    
+    def make_decimal(self):
+        screen = self.label_equation.text()
+        if screen[-1] == ".":
+                pass
+        else:
+                self.label_equation.setText(f'-{screen}.')
+
+    def square(self):
+        screen = self.label_equation.text()
+        try:
+                answer = ((screen) ** 2)
+                self.label_equation.setText(str(answer))
+        except:
+                self.label_equation.setText("ERROR")
+
+    def square_root(self):
+        screen = self.label_equation.text()
+        try:
+                answer = math.sqrt(screen)
+                self.label_equation.setText(str(answer))
+        except:
+                self.label_equation.setText("ERROR")
+
+    def evaluate_it(self):
+        screen = self.label_equation.text()
+        try:
+                answer = eval(screen)
+                self.label_equation.setText(str(answer))
+        except:
+                self.label_equation.setText("ERROR")
+
+    def negative_positive(self):
+        screen = self.label_equation.text()
+        if "-" in screen:
+            self.label_equation.setText(screen.replace("-", ""))
+        else:
+            self.label_equation.setText(f'-{screen}')
+
+    def remove(self):
+        screen = self.label_equation.text()
+        screen = screen[:-1]
+        self.label_equation.setText(screen)
+
+
+    
+            
 
     def press_it(self, pressed):
         if pressed == "C":
